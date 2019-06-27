@@ -1,16 +1,12 @@
-## 0.7.0
-- Added `ProductionFilter`, `FileOutput`, `MemoryOutput`, `SimplePrinter`
-- Breaking: Changed `LogFilter`, `LogPrinter` and `LogOutput`
-
 ## 0.6.0
-- Added option to output timestamp
-- Added option to disable color
-- Added `LogOutput`
+- Add option to output timestamp
+- Add option to disable color
+- Add `LogOutput`
 - Behaviour change of `LogPrinter`
 - Remove dependency
 
 ## 0.5.0
-- Added emojis
+- Add emojis
 - `LogFilter` is a class now
 
 ## 0.4.0

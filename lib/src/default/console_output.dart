@@ -5,8 +5,8 @@ part of logger;
 /// It sends everything to the system console.
 class ConsoleOutput extends LogOutput {
   @override
-  void output(OutputEvent event) {
-    for (var line in event.lines) {
+  void output(Level level, List<String> lines) {
+    for (var line in lines) {
       print(line);
     }
   }
