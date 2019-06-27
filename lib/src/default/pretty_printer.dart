@@ -78,7 +78,8 @@ class PrettyPrinter extends LogPrinter {
   }
 
   @override
-  void log(Level level, dynamic message, dynamic error, StackTrace stackTrace) {
+  Future<List<String>> log(Level level, dynamic message, dynamic error,
+      StackTrace stackTrace) async {
     var messageStr = stringifyMessage(message);
 
     String stackTraceStr;
@@ -97,7 +98,7 @@ class PrettyPrinter extends LogPrinter {
       timeStr = getTime();
     }
 
-    formatAndPrint(level, messageStr, timeStr, errorStr, stackTraceStr);
+    return formatAndPrint(level, messageStr, timeStr, errorStr, stackTraceStr);
   }
 
   String formatStackTrace(StackTrace stackTrace, int methodCount) {
@@ -186,40 +187,44 @@ class PrettyPrinter extends LogPrinter {
     }
   }
 
-  formatAndPrint(Level level, String message, String time, String error,
-      String stacktrace) {
+  List<String> formatAndPrint(Level level, String message, String time,
+      String error, String stacktrace) {
     var color = _getLevelColor(level);
-    println(color(_topBorder));
+    final list = List<String>();
+
+    list.add(color(_topBorder));
 
     if (error != null) {
       var errorColor = _getErrorColor(level);
       for (var line in error.split('\n')) {
-        println(
+        list.add(
           color('$verticalLine ') +
               errorColor.resetForeground +
               errorColor(line) +
               errorColor.resetBackground,
         );
       }
-      println(color(_middleBorder));
+      list.add(color(_middleBorder));
     }
 
     if (stacktrace != null) {
       for (var line in stacktrace.split('\n')) {
-        println('${color}$verticalLine $line');
+        list.add('${color}$verticalLine $line');
       }
-      println(color(_middleBorder));
+      list.add(color(_middleBorder));
     }
 
     if (time != null) {
-      println(color('$verticalLine $time'));
-      println(color(_middleBorder));
+      list.add(color('$verticalLine $time'));
+      list.add(color(_middleBorder));
     }
 
     var emoji = _getEmoji(level);
     for (var line in message.split('\n')) {
-      println(color('$verticalLine $emoji$line'));
+      list.add(color('$verticalLine $emoji$line'));
     }
-    println(color(_bottomBorder));
+    list.add(color(_bottomBorder));
+
+    return list;
   }
 }

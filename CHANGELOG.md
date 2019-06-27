@@ -1,7 +1,10 @@
+## 1.0.0
+- Decoupled LogOutput from LogPrinter
+
 ## 0.6.0
-- Add option to output timestamp
-- Add option to disable color
-- Add `LogOutput`
+- Added option to output timestamp
+- Added option to disable color
+- Added `LogOutput`
 - Behaviour change of `LogPrinter`
 - Remove dependency
 
