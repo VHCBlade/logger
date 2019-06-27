@@ -3,7 +3,7 @@ part of logger;
 /// Default implementation of [LogPrinter].
 ///
 /// Outut looks like this:
-/// ```
+///
 /// ┌──────────────────────────
 /// │ Error info
 /// ├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
@@ -78,26 +78,27 @@ class PrettyPrinter extends LogPrinter {
   }
 
   @override
-  void log(LogEvent event) {
-    var messageStr = stringifyMessage(event.message);
+  Future<List<String>> log(Level level, dynamic message, dynamic error,
+      StackTrace stackTrace) async {
+    var messageStr = stringifyMessage(message);
 
     String stackTraceStr;
-    if (event.stackTrace == null) {
+    if (stackTrace == null) {
       if (methodCount > 0) {
         stackTraceStr = formatStackTrace(StackTrace.current, methodCount);
       }
     } else if (errorMethodCount > 0) {
-      stackTraceStr = formatStackTrace(event.stackTrace, errorMethodCount);
+      stackTraceStr = formatStackTrace(stackTrace, errorMethodCount);
     }
 
-    var errorStr = event.error?.toString();
+    var errorStr = error?.toString();
 
     String timeStr;
     if (printTime) {
       timeStr = getTime();
     }
 
-    formatAndPrint(event.level, messageStr, timeStr, errorStr, stackTraceStr);
+    return formatAndPrint(level, messageStr, timeStr, errorStr, stackTraceStr);
   }
 
   String formatStackTrace(StackTrace stackTrace, int methodCount) {
@@ -186,40 +187,44 @@ class PrettyPrinter extends LogPrinter {
     }
   }
 
-  formatAndPrint(Level level, String message, String time, String error,
-      String stacktrace) {
+  List<String> formatAndPrint(Level level, String message, String time,
+      String error, String stacktrace) {
     var color = _getLevelColor(level);
-    println(color(_topBorder));
+    final list = List<String>();
+
+    list.add(color(_topBorder));
 
     if (error != null) {
       var errorColor = _getErrorColor(level);
       for (var line in error.split('\n')) {
-        println(
+        list.add(
           color('$verticalLine ') +
               errorColor.resetForeground +
               errorColor(line) +
               errorColor.resetBackground,
         );
       }
-      println(color(_middleBorder));
+      list.add(color(_middleBorder));
     }
 
     if (stacktrace != null) {
       for (var line in stacktrace.split('\n')) {
-        println('${color}$verticalLine $line');
+        list.add('${color}$verticalLine $line');
       }
-      println(color(_middleBorder));
+      list.add(color(_middleBorder));
     }
 
     if (time != null) {
-      println(color('$verticalLine $time'));
-      println(color(_middleBorder));
+      list.add(color('$verticalLine $time'));
+      list.add(color(_middleBorder));
     }
 
     var emoji = _getEmoji(level);
     for (var line in message.split('\n')) {
-      println(color('$verticalLine $emoji$line'));
+      list.add(color('$verticalLine $emoji$line'));
     }
-    println(color(_bottomBorder));
+    list.add(color(_bottomBorder));
+
+    return list;
   }
 }

@@ -1,6 +1,5 @@
-## 0.7.0
-- Added `ProductionFilter`, `FileOutput`, `MemoryOutput`, `SimplePrinter`
-- Breaking: Changed `LogFilter`, `LogPrinter` and `LogOutput`
+## 1.0.0
+- Decoupled LogOutput from LogPrinter
 
 ## 0.6.0
 - Added option to output timestamp
@@ -10,7 +9,7 @@
 - Remove dependency
 
 ## 0.5.0
-- Added emojis
+- Add emojis
 - `LogFilter` is a class now
 
 ## 0.4.0
