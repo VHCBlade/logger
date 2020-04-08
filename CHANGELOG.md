@@ -1,3 +1,6 @@
+## 1.0.1
+- Changed logger contents to be public
+
 ## 1.0.0
 - Decoupled LogOutput from LogPrinter
 
